@@ -6,7 +6,7 @@
 /*   By: ahorling <ahorling@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/29 20:06:48 by ahorling      #+#    #+#                 */
-/*   Updated: 2023/06/02 14:55:04 by ahorling      ########   odam.nl         */
+/*   Updated: 2023/06/02 18:27:38 by ahorling      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	print_intro(void)
 
 int	main(void)
 {
-	PhoneBook	book(0);
+	PhoneBook	book;
 	std::string input;
 
 	while (true)

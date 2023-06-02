@@ -6,7 +6,7 @@
 /*   By: ahorling <ahorling@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/29 20:06:38 by ahorling      #+#    #+#                 */
-/*   Updated: 2023/06/02 14:54:14 by ahorling      ########   odam.nl         */
+/*   Updated: 2023/06/02 18:52:30 by ahorling      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 #include "phonebook.hpp"
 #include "contacts.hpp"
 
-PhoneBook::PhoneBook(int current_contact)
+PhoneBook::PhoneBook()
 {
-	contact_num = current_contact;
+	int	i = 0;
+	contact_num = 0;
+	while (i < 8)
+	{
+		contact[i].filled = false;
+		i++;
+	}
 }
 
 PhoneBook::~PhoneBook()
@@ -43,6 +49,7 @@ void	PhoneBook::set_contact(void)
 void	PhoneBook::search_contact()
 {
 	int			i;
+	size_t		recieved;
 	std::string	num;
 
 	i = 0;
@@ -54,7 +61,16 @@ void	PhoneBook::search_contact()
 	}
 	std::cout << std::endl << "WHICH CONTACT WOULD YOU LIKE TO DISPLAY?" << std::endl;
 	std::getline(std::cin, num);
-	if (stoi(num) > '8' || stoi(num) < '1')
+	try
+	{
+		recieved = std::stoll(num);
+	}
+	catch(...)
+	{
+		std::cerr << "EXCEPTION OCCURED. PLEASE USE A REASONABLE NUMBER (CHARACTERS ARE NOT REASONABLE!) >:(" << std::endl;
+		exit(1);
+	}
+	if (recieved > 8 || recieved < 1)
 	{
 		std::cout << "I'M SORRY, BUT THAT NUMBER LIES OUTSIDE OF MY ALLOTED POSSIBLE MEMORY.\n" << std::endl;
 		return;

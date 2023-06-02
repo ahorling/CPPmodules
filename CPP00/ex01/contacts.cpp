@@ -6,7 +6,7 @@
 /*   By: ahorling <ahorling@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/05/29 20:06:44 by ahorling      #+#    #+#                 */
-/*   Updated: 2023/05/31 21:51:48 by ahorling      ########   odam.nl         */
+/*   Updated: 2023/06/02 18:23:38 by ahorling      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	Contacts::print_contact(void)
 {
 	if (index == 9)
 		return;
-	if (filled != true)
+	if (!filled)
 		std::cout << "SORRY, THAT CONTACT HAS NOT YET BEEN ADDED TO MY LOGS.\n" << std::endl;
 	else
 	{
