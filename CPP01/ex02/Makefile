@@ -5,8 +5,8 @@
 #                                                      +:+                     #
 #    By: ahorling <ahorling@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
-#    Created: 2023/06/02 21:24:18 by ahorling      #+#    #+#                  #
-#    Updated: 2023/06/05 01:47:58 by ahorling      ########   odam.nl          #
+#    Created: 2023/06/05 00:30:11 by ahorling      #+#    #+#                  #
+#    Updated: 2023/06/05 00:32:59 by ahorling      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,15 +25,13 @@ RESET	:= \033[0m
 
 ############## CONSTANTS #############
 
-NAME := MoreBrainz
+NAME := Brain2ElectricBoogaloo
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
 
 ############### SOURCES ##############
 
 SOURCES 	:=	main.cpp \
-				zombieHorde.cpp \
-				Zombie.cpp \
 
 INCLUDES	:=
 				

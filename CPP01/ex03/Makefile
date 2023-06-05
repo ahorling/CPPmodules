@@ -5,8 +5,8 @@
 #                                                      +:+                     #
 #    By: ahorling <ahorling@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
-#    Created: 2023/06/02 21:24:18 by ahorling      #+#    #+#                  #
-#    Updated: 2023/06/05 01:47:58 by ahorling      ########   odam.nl          #
+#    Created: 2023/06/05 01:48:05 by ahorling      #+#    #+#                  #
+#    Updated: 2023/06/05 02:40:39 by ahorling      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,15 +25,16 @@ RESET	:= \033[0m
 
 ############## CONSTANTS #############
 
-NAME := MoreBrainz
+NAME := Violence
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
 
 ############### SOURCES ##############
 
 SOURCES 	:=	main.cpp \
-				zombieHorde.cpp \
-				Zombie.cpp \
+				Weapon.cpp \
+				HumanA.cpp \
+				HumanB.cpp
 
 INCLUDES	:=
 				
