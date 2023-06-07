@@ -5,8 +5,8 @@
 #                                                      +:+                     #
 #    By: ahorling <ahorling@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
-#    Created: 2023/06/07 16:19:14 by ahorling      #+#    #+#                  #
-#    Updated: 2023/06/07 16:20:41 by ahorling      ########   odam.nl          #
+#    Created: 2023/06/07 17:49:04 by ahorling      #+#    #+#                  #
+#    Updated: 2023/06/07 18:11:53 by ahorling      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,13 +25,14 @@ RESET	:= \033[0m
 
 ############## CONSTANTS #############
 
-NAME := Sednt
+NAME := harlFilter
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
 
 ############### SOURCES ##############
 
-SOURCES 	:=	main.cpp
+SOURCES 	:=	main.cpp \
+				Harl.cpp
 
 INCLUDES	:=
 				
