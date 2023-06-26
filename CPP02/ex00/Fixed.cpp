@@ -6,7 +6,7 @@
 /*   By: ahorling <ahorling@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/06/16 15:53:08 by ahorling      #+#    #+#                 */
-/*   Updated: 2023/06/16 16:06:33 by ahorling      ########   odam.nl         */
+/*   Updated: 2023/06/16 20:33:19 by ahorling      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ Fixed::Fixed()
 	value = 0;
 }
 
-Fixed::Fixed(const Fixed &t)
+Fixed::Fixed(const Fixed &other)
 {
 	std::cout << "Copy Constructor Called" << std::endl;
-	*this = t;
+	*this = other;
 }
 
 Fixed::~Fixed()

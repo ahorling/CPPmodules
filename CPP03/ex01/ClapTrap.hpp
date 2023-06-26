@@ -1,32 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   Fixed.hpp                                          :+:    :+:            */
+/*   ClapTrap.hpp                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: ahorling <ahorling@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/06/16 15:43:19 by ahorling      #+#    #+#                 */
-/*   Updated: 2023/06/16 20:33:16 by ahorling      ########   odam.nl         */
+/*   Created: 2023/06/26 15:08:52 by ahorling      #+#    #+#                 */
+/*   Updated: 2023/06/26 17:49:11 by ahorling      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FIXED_HPP
-# define FIXED_HPP
+#ifndef CLAPTRAP_HPP
+# define CLAPTRAP_HPP
 
 # include <string>
 
-class	Fixed
+class ClapTrap
 {
-private:
-	int					value;
-	static const int	bits = 8;
+protected:
+	std::string	name;
+	int	hp;
+	int ep;
+	int	ad;
 public:
-	Fixed();
-	Fixed(Fixed const &other);
-	Fixed &operator=(Fixed const &other);
-	~Fixed();
-	int		getRawBits(void) const;
-	void	setRawBits(int const raw);
+	ClapTrap();
+	ClapTrap(std::string setname);
+	ClapTrap(ClapTrap const &src);
+	~ClapTrap();
+	ClapTrap &operator = (ClapTrap const &right);
+	void attack(std::string const &target);
+	void takeDamage(unsigned int amount);
+	void beRepaired(unsigned int amount);
 };
 
 #endif
