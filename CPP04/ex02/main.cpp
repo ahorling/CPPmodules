@@ -6,7 +6,7 @@
 /*   By: ahorling <ahorling@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/07/20 15:14:42 by ahorling      #+#    #+#                 */
-/*   Updated: 2023/07/22 17:20:50 by ahorling      ########   odam.nl         */
+/*   Updated: 2023/07/22 17:32:55 by ahorling      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@
 #include "Lists.hpp"
 
 
-void	leaks()
-{
-	system("leaks -q Brain");
-}
+// void	leaks()
+// {
+// 	system("leaks -q AbstractAnimal");
+// }
 
 int	main()
 {
-	atexit(leaks);
+	// atexit(leaks);
 
 	std::cout << "\n########## PROVING MY ANIMALS' BRAINS DONT LEAK ##########\n" << std::endl;
 	const Animal* j = new Dog();
@@ -43,7 +43,7 @@ int	main()
 
 	for (int i = 1; i <= numAnimals; i++)
 	{
-		if (numAnimals % i == 0)
+		if (i % 2 == 0)
 			animals[i - 1] = new Dog();
 		else
 			animals[i - 1] = new Cat();
