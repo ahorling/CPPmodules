@@ -6,7 +6,7 @@
 #    By: ahorling <ahorling@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/11/30 17:58:52 by ahorling      #+#    #+#                  #
-#    Updated: 2023/12/02 15:32:55 by ahorling      ########   odam.nl          #
+#    Updated: 2023/12/02 17:03:41 by ahorling      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,14 +25,18 @@ RESET	:= \033[0m
 
 ############## CONSTANTS #############
 
-NAME := Bueraucrats
+NAME := MoreForms
 CC := c++
 CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
 
 ############### SOURCES ##############
 
 SOURCES 	:=	main.cpp \
-				Bureaucrat.cpp
+				Bureaucrat.cpp \
+				AForm.cpp \
+				ShrubberyCreationForm.cpp \
+				RobotomyRequestForm.cpp \
+				PresidentialPardonForm.cpp \
 
 INCLUDES	:=
 				

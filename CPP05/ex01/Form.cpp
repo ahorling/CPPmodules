@@ -1,12 +1,15 @@
 #include "Form.hpp"
-#include <string>
 
 Form::Form(): _signauth(0), _execauth(0)
 {
 }
 
-Form::Form(std::string const name, int const signauth, int const execauth): _name(name), _signauth(signauth), _execauth(execauth)
+Form::Form(std::string const &name, int const signauth, int const execauth): _name(name), _signauth(signauth), _execauth(execauth)
 {
+	if (_signauth <= 0 || _execauth <= 0)
+		throw Form::GradeTooHighExcpetion();
+	else if (_signauth >= 151 || _execauth >= 151)
+		throw Form::GradeTooLowException();
     this->_signed = false;
 }
 
@@ -25,12 +28,12 @@ Form	&Form::operator=(Form const &rhs)
 	return(*this);
 }
 
-std::string	const	Form::getName() const
+std::string	        Form::getName() const
 {
     return(this->_name);
 }
 
-bool                Form::getSigned() const
+bool				Form::getSigned() const
 {
     return(this->_signed);
 }
@@ -55,8 +58,16 @@ char const	    *Form::GradeTooLowException::what() const throw()
 	return ("Grade too Low");
 }
 
-std::ostream	&operator<<(std::ostream &out, const Form &form)
+void	Form::beSigned(Bureaucrat const &signer)
 {
-    out << form.getName() << " is signed: " << form.getSigned() << ", with a signage autherization of grade: " << form.getSignAuth() << " and an execution autherization of grade: " << form.getExecAuth();
+	if (signer.getGrade() <= this->_signauth)
+		_signed = true;
+	else if (signer.getGrade() > this->_signauth)
+		throw Form::GradeTooLowException();
+}
+
+std::ostream	&operator<<(std::ostream &out, Form const &Form)
+{
+    out << Form.getName() << " is signed: " << Form.getSigned() << ", with a signage autherization of grade: " << Form.getSignAuth() << " and an execution autherization of grade: " << Form.getExecAuth();
     return(out);
 }
