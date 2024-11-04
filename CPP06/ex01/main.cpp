@@ -1,35 +1,23 @@
 #include <iostream>
-#include "struct.hpp"
+#include "Serializer.hpp"
+#include "Data.hpp"
 
-uintptr_t serialize(Data *ptr)
-{
-	return (reinterpret_cast<uintptr_t>(ptr));
-}
-
-Data*	deserialize(uintptr_t raw)
-{
-	return (reinterpret_cast<Data*>(raw));
-}
 
 int main(void)
 {
-	Data *info = new Data;
-	uintptr_t hold_info = serialize(info);
-	Data *info2;
+	Data *something;
+	something = new Data;
 
-	info->a = 5;
-	info->stuff = "Hello!";
+	uintptr_t	*serializedThing = Serializer::serialize(something);
+	Data* deserializedThing = Serializer::deserialize(serializedThing);
 
-	std::cout << "Address of Info [" << info << "]" << std::endl;
-	std::cout << "Value of Info [" << info->a << "] [" << info->stuff << "]" << std::endl;
-	std::cout << "hold_info seralize [" << std::hex << hold_info << std::dec << "]" << std::endl;
-	info->a = 8;
-	info2 = deserialize(hold_info);
-	info->a = 9;
-	std::cout << "Address of Info [" << info << "]" << std::endl;
-	std::cout << "Value of Info [" << info->a << "] [" << info->stuff << "]" << std::endl;
-	std::cout << "Address of Info2 [" << info2 << "]" << std::endl;
-	std::cout << "Value of Info2 [" << info2->a << "] [" << info2->stuff << "]" << std::endl;
+	something->X = 42;
 
-	delete info;
+	std::cout << "original pointer: " << &something << std::endl;
+	std::cout << "something->data: " << something->X << std::endl;
+	std::cout << "after serializing: " << serializedThing << std::endl;
+	std::cout << "after deserializing: " << deserializedThing << std::endl;
+
+	delete something;
+	return (0);
 }

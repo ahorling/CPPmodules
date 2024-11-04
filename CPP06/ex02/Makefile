@@ -20,9 +20,9 @@ CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
 ############### SOURCES ##############
 
 SOURCES 	:=	main.cpp \
-				base.cpp
+				Base.cpp
 
-INCLUDES	:=	base.hpp
+INCLUDES	:=
 				
 SOURCE_DIR 	:=	./
 OBJECT_DIR	:=	objects

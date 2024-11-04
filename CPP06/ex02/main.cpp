@@ -14,7 +14,7 @@ Base* generate(void)
 		case 2:
 			return (new C());
 		default:
-			std::cout << "Should never of gotten to default case, line 17" << std::endl;
+			std::cout << "Something has gone horribly wrong in the generate function" << std::endl;
 	}
 	return (NULL);
 }
@@ -28,7 +28,7 @@ void identify(Base* p)
 	else if (dynamic_cast<C*>(p))
 		std::cout << "Type C!" << std::endl;
 	else
-		std::cout << "This else should never of triggered, line 31" << std::endl;
+		std::cout << "Something has gone horribly wrong in the pointer function" << std::endl;
 }
 
 void identify(Base& p)

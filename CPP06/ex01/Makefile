@@ -20,9 +20,10 @@ CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
 
 ############### SOURCES ##############
 
-SOURCES 	:=	main.cpp
+SOURCES 	:=	main.cpp\
+				Serializer.cpp
 
-INCLUDES	:=	struct.hpp
+INCLUDES	:=
 				
 SOURCE_DIR 	:=	./
 OBJECT_DIR	:=	objects

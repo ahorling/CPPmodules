@@ -3,9 +3,8 @@
 
 class Base
 {
-	public:
-		Base();
-		virtual ~Base();
+    public:
+    	virtual	~Base();
 };
 
 class A: public Base{};
