@@ -1,28 +1,49 @@
 #include <iostream>
 #include "MutantStack.hpp"
+#include <stack>
+#include <list>
 
 int main()
 {
-	MutantStack<int> mstack;
-	mstack.push(5);
-	mstack.push(17);
-	std::cout << mstack.top() << std::endl;
-	mstack.pop();
-	std::cout << mstack.size() << std::endl;
-	mstack.push(3);
-	mstack.push(5);
-	mstack.push(737);
-	//[...]
-	mstack.push(0);
-	MutantStack<int>::iterator it = mstack.begin();
-	MutantStack<int>::iterator ite = mstack.end();
-	++it;
-	--it;
-	while (it != ite)
+	std::cout << "MUTANTSTACK TESTS:" << std::endl;
+
+	MutantStack<int> mutant;
+	mutant.push(4);
+	std::cout << mutant.top() << std::endl;
+	mutant.push(2);
+	std::cout << mutant.top() << std::endl;
+	std::cout << mutant.size() << std::endl;
+	mutant.push(12);
+	mutant.push(42);
+	mutant.push(101);
+	MutantStack<int>::iterator itbegin = mutant.begin();
+	MutantStack<int>::iterator itend = mstack.end();
+	while (itbegin != itend)
 	{
-		std::cout << *it << std::endl;
-		++it;
+		std::cout << "itbegin: " << *itbegin << ", itend: " << *itend << std::endl;
+		itbegin++;
+		itend++;
 	}
-	std::stack<int> s(mstack);
-	return 0;
+	std::stack<int> normalstack(mutant);
+
+	std::cout << "STD::LIST TESTS:" << std::endl;
+
+	std::list<int> list;
+	list.push_back(4);
+	std::cout << list.back() << std::endl;
+	list.push_back(2);
+	std::cout << list.back() << std::endl;
+	std::cout << list.size() << std::endl;
+	list.push_back(12);
+	list.push_back(42);
+	list.push_back(101);
+	std::list<int>::iterator itlistbegin = list.begin();
+	std::list<int>::iterator itlistend = list.end();
+	while (itlistbegin != itlistend)
+	{
+		std::cout << "itlistbegin: " << *itlistbegin << ", itlistend: " << *itlistend << std::endl;
+		itlistbegin++;
+		itlistend++;
+	}
+	return(0);
 }

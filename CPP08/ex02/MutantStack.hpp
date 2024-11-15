@@ -1,29 +1,25 @@
 #ifndef MUTANTSTACK_HPP
 # define MUTANTSTACK_HPP
 
-# include <stack>
-#include <deque>
-
-template <class t>
-class MutantStack : public std::stack<t>
+template <typename T>
+class MutantStack : public std::stack<T>
 {
 	public:
-		MutantStack(void){}
-		MutantStack(MutantStack const & src) : std::stack<t>(src){};
-		MutantStack& operator=(MutantStack const & src)
+		MutantStack() : std::stack<T>() {}
+		MutantStack(MutantStack const &src) : std::stack<T>(src) {};
+		MutantStack &operator=(MutantStack const &src)
 		{
-			std::stack<t>::operator=(src);
+			std::stack<T>::operator=(src);
 			return (*this);
 		}
-		~MutantStack(void){};
+		virtual ~MutantStack() {};
 
-		typedef typename MutantStack::container_type::iterator iterator;
-
-		iterator begin(void)
+		typedef typename std::stack<T>::container_type::iterator iterator;
+		iterator begin()
 		{
 			return (this->c.begin());
 		}
-		iterator end(void)
+		iterator end()
 		{
 			return (this->c.end());
 		}
