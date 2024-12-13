@@ -1,206 +1,195 @@
 #include <iostream>
-#include "PmergeMe.hpp"
 #include "set"
 #include "vector"
-#include <ctime>
+#include "deque"
+#include <chrono>
+#include <algorithm>
 
-//Why can't i hand in more .c files, why do i need a PmergeMe.cpp
-//Why cant have a {container1.cpp} and {container2.cpp}
-//I dont even need a .hpp according to these rules, whats a class gonna do
-int		exit_non_valid_number(char *number)
-{
-	std::string strnum(number);
-	int num = 0;
-	try{
-		num = stoi(strnum);
-	}
-	catch (...){
-		std::cout << "Invalid number conversation: " << strnum << std::endl;
-		exit(1);
-	}
-	if (num < 0)
-	{
-		std::cout << "Negative number submitted: " << strnum << std::endl;
-		exit(1);
-	}
-	return (num);
+//Why do i need a PmergeMe.cpp?
+//Wouldn't a {container1.cpp} and {container2.cpp} make more sense?
+//I dont even need a .hpp, might as well just do this class-less
+//Seriously, I get the concept behind this module but damn the setup is weird.
+
+/* ------------------------------------------------------------------------------*/
+
+
+//print functions for debugging stuff
+void printPairs(const std::vector<std::vector<int>>& vec) {
+    std::cout << "[";
+    for (size_t i = 0; i < vec.size(); ++i) {
+        std::cout << "(" << vec[i][0] << ", " << vec[i][1] << ")";
+        if (i < vec.size() - 1) std::cout << ", ";
+    }
+    std::cout << "]" << std::endl;
 }
 
-std::set<int>	zip_sets(std::set<int> leftSet, std::set<int> rightSet)
-{
-	std::set<int>			rvalue;
-	std::set<int>::iterator leftIt = leftSet.begin();
-	std::set<int>::iterator rightIt = rightSet.begin();
+void printVector(const std::vector<int>& arr) {
+    for (int num : arr) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+}
 
-	while(leftIt != leftSet.end() && rightIt != rightSet.end())
+//---------------------------------------------------------------------------------/
+
+//function to generate a specific jacobsthal number to be used with the binary search section.
+size_t jacobsthal(size_t n)
+{
+	size_t ret;
+
+	if ( n <= 1)
+		return (n);
+	ret = jacobsthal(n - 1) + (2 * jacobsthal(n - 2));
+	return (ret);
+}
+
+bool	comp(int &a, int &b)
+{
+	if (a > b)
+		return (true);
+	else
+		return (false);
+}
+
+//splits the given vector and retuns the front half
+std::vector<int> vecSplitFront(std::vector<int> &array)
+{
+	std::vector<int> ret;
+
+	for (int i = 0; i < array.size() / 2; i++)
+		ret.push_back(array[i]);
+	
+	return (ret);
+}
+
+//splits the given vector and returns back half
+std::vector<int> vecSplitBack(std::vector<int> &array)
+{
+	std::vector<int> ret;
+
+	for (int i = array.size() / 2; i < array.size(); i++)
+		ret.push_back(array[i]);
+
+	return (ret);
+}
+
+//recursively figures out where a value is supposed to be and inserts it there
+void vecInsert(std::vector<std::vector<int>> &pair, std::vector<int> toInsert, int left, int right)
+{
+	if (left >= right)
 	{
-		if (*leftIt < *rightIt)
+		pair.insert(pair.begin() + left, toInsert);
+		return;
+	}
+	int middle = (right - left)/2 + left;
+	if (toInsert[0] > pair[middle][0])
+		vecInsert(pair, toInsert, middle + 1, right);
+	else
+		vecInsert(pair, toInsert, left, middle);
+}
+
+//using hte jacobsthal number generated in jacobsthal_insert, does the actual insertion part of the algorithm
+void	insertInOrder(std::vector<std::vector<int>> &src, std::vector<std::vector<int>> &dst, size_t index, size_t jacob, std::vector<int> &straggler)
+{
+	for (int i = 0; jacob > index + i; i++)
+	{
+		if (index + i < src.size())
+			dst.push_back(vecSplitFront(src[index + i]));
+	}
+
+	int insertPos = dst.size() - 1;
+
+	for (int i = 1; jacob - i >= index; i++)
+	{
+		if (jacob > src.size() && !straggler.empty())
 		{
-			rvalue.insert(*leftIt);
-			leftIt++;
+			vecInsert(dst, straggler, 0, dst.size());
+			straggler.clear();
+			insertPos++;
 		}
+		if (jacob - i < src.size())
+			vecInsert(dst, vecSplitBack(src[jacob - i]), 0 , insertPos);
+	}
+}
+
+//insert the numbers buy calling the insertInOrder function for every jacobsthal number smaller than the number of pairs.
+void	jacobsthal_insert(std::vector<std::vector<int>> &src, std::vector<std::vector<int>> &dst, std::vector<int> straggler = {})
+{
+	size_t currentJacob;
+	size_t prevJacob = 1; 
+	size_t i = 3; //jacobsthal really starts from 3rd instance, so setting previous to 1 and the position in sequence to 3
+
+	//so long as there are pairs in the source, or the stragger is still around (because it is always done last), insert the number in order
+	while(prevJacob < src.size() || !straggler.empty())
+	{
+		currentJacob = jacobsthal(i);
+		insertInOrder(src, dst, prevJacob, currentJacob, straggler);
+		i++;
+		prevJacob = currentJacob;
+	}
+}
+
+std::vector<int> vecMerge(std::vector<int> a, const std::vector<int> b)
+{
+	for (int i : b)
+		a.push_back(i);
+	return (a);
+}
+
+//Pairs up the given pair of vectors into further pairs, unil no more can be made, then start the bullshit.
+std::vector<std::vector<int>> vecMergeInsert(std::vector<std::vector<int>> input)
+{
+	std::vector<std::vector<int>> pairedVec;
+
+	for (size_t i = 0; i + 1 < input.size(); i += 2)
+	{
+		if (comp(input[i][0], input[i + 1][0]))
+			pairedVec.push_back(vecMerge(input[i], input[i + 1]));
 		else
-		{
-			rvalue.insert(*rightIt);
-			rightIt++;
-		}
+			pairedVec.push_back(vecMerge(input[i + 1], input[i]));
 	}
-	while (leftIt != leftSet.end())
-	{
-		rvalue.insert(*leftIt);
-		leftIt++;
-	}
-	while (rightIt != rightSet.end())
-	{
-		rvalue.insert(*rightIt);
-		rightIt++;
-	}
-	return (rvalue);
+
+	if (pairedVec.size() > 1)
+		pairedVec = vecMergeInsert(pairedVec);
+
+	std::vector<std::vector<int>> ret;
+
+	ret.push_back(vecSplitFront(pairedVec[0]));
+	ret.push_back(vecSplitBack(pairedVec[0]));
+
+	if (input.size() % 2 != 0)
+		jacobsthal_insert(pairedVec, ret, input.back());
+	else
+		jacobsthal_insert(pairedVec, ret);
+	
+	return(ret);
 }
 
-void print_before(char *argv[])
+//change the input array into a vector of vectors, setting up the pairing section of Merge-Insert, and converts the pairs into a single vector again.
+std::vector<int> vecSort(std::vector<int> input)
 {
-	std::cout << "Before:	";
-	for (int i = 1; argv[i]; i++)
-		std::cout << " " << argv[i];
-	std::cout << std::endl;
-}
+	std::vector<std::vector<int>> preppedVec;
+	std::vector<int> ret;
 
-std::set<int>	sort_mySet(std::set<int> mySet)
-{
-	int size = mySet.size();
-	if (size == 1)
-		return (mySet);
-	std::set<int> leftSet;
-	std::set<int> rightSet;
-	std::set<int>::iterator it = mySet.begin();
-	for(int i = 0; i < (size/2); i++)
+	for (size_t i = 0; i < input.size(); i++)
+		preppedVec.push_back(std::vector<int>{input[i]});
+	preppedVec = vecMergeInsert(preppedVec);
+	for (std::vector<int> pair : preppedVec)
 	{
-		leftSet.insert(*it);
-		it++;
+		for (int n : pair)
+			ret.push_back(n);
 	}
-	for (int i = (size/2); i < size; i++)
-	{
-		rightSet.insert(*it);
-		it++;
-	}
-	leftSet = sort_mySet(leftSet);
-	rightSet = sort_mySet(rightSet);
-	return (zip_sets(leftSet, rightSet));
-}
+	return (ret);
+} 
 
-void	print_set(std::set<int> mySet)
-{
-	std::set<int>::iterator it = mySet.begin();
-	std::cout << "After:	";
-	while (it != mySet.end())
-	{
-		std::cout << *it << " ";
-		it++;
-	}
-	std::cout << std::endl;
-}
-
-void	set_sort(int argc, char *argv[])
-{
-	clock_t start = clock();
-	std::set<int> mySet;
-	for (int i = 1; i < argc; i++)
-	{
-		int input =exit_non_valid_number(argv[i]);
-		//The management of errors related to duplicates is left to your
-		//discretion. : I am choosing to exit upon duplicates.
-		if (mySet.count(input) != 0)
-		{
-			std::cout << "Duplicate input detected :" << input << std::endl;
-			exit(1); 
-		}
-		mySet.insert(input);
-	}
-	clock_t input_end = clock() - start;
-	mySet = sort_mySet(mySet);
-	clock_t sort_end = clock() - start;
-	print_before(argv);
-	print_set(mySet);
-	printf("mySet:Input time: %fs || Sort Time: %fs\n", (float(input_end)/CLOCKS_PER_SEC), (float(sort_end)/CLOCKS_PER_SEC));
-}
-
-//I have to use two different containers, not two different merge sort implentetations, its a pretty copy carbon paste.""
-std::vector<int> zip_vectors(std::vector<int> leftVector, std::vector<int> rightVector)
-{
-	std::vector<int>			rvalue;
-	std::vector<int>::iterator leftIt = leftVector.begin();
-	std::vector<int>::iterator rightIt = rightVector.begin();
-
-	while(leftIt != leftVector.end() && rightIt != rightVector.end())
-	{
-		if (*leftIt < *rightIt)
-		{
-			rvalue.push_back(*leftIt);
-			leftIt++;
-		}
-		else
-		{
-			rvalue.push_back(*rightIt);
-			rightIt++;
-		}
-	}
-	while (leftIt != leftVector.end())
-	{
-		rvalue.push_back(*leftIt);
-		leftIt++;
-	}
-	while (rightIt != rightVector.end())
-	{
-		rvalue.push_back(*rightIt);
-		rightIt++;
-	}
-	return (rvalue);
-}
-
-std::vector<int> sort_myVector(std::vector<int> myVector)
-{
-	int size = myVector.size();
-	if (size == 1)
-		return (myVector);
-	std::vector<int> leftVector;
-	std::vector<int> rightVector;
-	for (int i = 0; i < (size/2); i++)
-		leftVector.push_back(myVector[i]);
-	for (int i = (size/2); i < size; i++)
-		rightVector.push_back(myVector[i]);
-	leftVector = sort_myVector(leftVector);
-	rightVector = sort_myVector(rightVector);
-	return (zip_vectors(leftVector, rightVector));
-}
-
-// void	print_vector(std::vector<int> myVector)
-// {
-// 	for (size_t i = 0; i < myVector.size(); i++)
-// 		std::cout << myVector[i] << " ";
-// 	std::cout << std::endl;
-// }
-void	vector_sort(int argc, char *argv[])
-{
-	clock_t start = clock();
-	std::vector<int> myVector;
-	for (int i = 1; i < argc; i++)
-	{
-		int input = exit_non_valid_number(argv[i]);
-		//Number duplicate check isn't needed here as mySet checks for duplicates before hand.
-		//Can also check duplicates before both if really wanted too, mostly a time save since i hate working on cpp modules
-		myVector.push_back(input);
-	}
-	// print_vector(myVector);
-	clock_t input_end = clock() - start;
-	myVector = sort_myVector(myVector);
-	clock_t sort_end = clock() - start;
-	printf("myVector:Input time: %f || Sort Time: %f\n", (float(input_end)/CLOCKS_PER_SEC), (float(sort_end)/CLOCKS_PER_SEC));
-	// print_vector(myVector);
-}
+//----------------------------- Vector break point-----------------------------
 
 int		main(int argc, char *argv[])
 {
+	std::vector<int>	vec;
+	std::deque<int>	deq;
+	std::set<int>	dupecheck;
+
 	if (argc < 2)
 	{
 		std::cout << "Please provide atleast 2 arguments" << std::endl;
@@ -208,15 +197,42 @@ int		main(int argc, char *argv[])
 	}
 	else if (argc < 3)
 	{
-		std::cout << "This is a sorting algorithm... why are we sorting less than 1 item" << std::endl;
+		std::cout << "This is a sorting algorithm. Why are we sorting less than 1 item?" << std::endl;
 		return (1);
 	}
-	set_sort(argc, argv);
-	vector_sort(argc, argv);
-	// (void)argv;
-	// clock_t start = clock();
-	// clock_t end = clock() - start;
-	// printf("It took [%fs]\n", (float(end)/CLOCKS_PER_SEC));
-	// std::cout << "It took: " << (float(end))/CLOCKS_PER_SEC << std::endl;
-	// std::cout << start << std::endl;
+
+	//check for dupes and add numbers to the containers one by one.
+	for (int i = 1; i < argc; i++)
+	{
+		int n = atoi(argv[i]);
+		if (dupecheck.find(n) != dupecheck.end())
+		{
+			std::cout << "We do not like duplicates, please make sure all inputs are unique integers." << std::endl;
+			return (-1);
+		}
+		dupecheck.insert(n);
+		vec.push_back(n);
+		deq.push_back(n);
+	}
+
+	//print out the first few numbers
+	std::cout << "Before: ";
+	for (int i = 0; i < vec.size(); i++)
+	{
+		if (i > 4)
+		{
+			std::cout << "[...]";
+			break;
+		}
+		std::cout << vec[i] << " ";
+	}
+	std::cout << std::endl;
+	std::cout << std::endl;
+	//do the sort for the vector and time it
+	auto start = std::chrono::high_resolution_clock::now();
+	vec = vecSort(vec);
+	printVector(vec);
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double, std::micro> vecTime = end - start;
+	return(0);
 }
