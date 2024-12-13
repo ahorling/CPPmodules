@@ -20,15 +20,15 @@ RPN &RPN::operator=(const RPN &other)
 
 int checkInput(char c)
 {
-    if (c = '+')
+    if (c == '+')
         return(PLUS);
-    else if (c = '-')
+    else if (c == '-')
         return(MINUS);
-    else if (c = '*')
+    else if (c == '*')
         return(MULT);
-    else if (c = '/')
+    else if (c == '/')
         return(DIV);
-    else if (c = ' ')
+    else if (c == ' ')
         return(SPACE);
     else if (c >= '0' && c <= '9')
         return(DIGIT);
@@ -85,7 +85,7 @@ void    RPN::add()
     RPNStack.pop();
     result = a + b;
     RPNStack.push(result);
-    // std::cout << a << " + " << b << " = " << result << std::endl;
+    std::cout << a << " + " << b << " = " << result << std::endl;
 }
 
 void    RPN::subtract()
@@ -99,7 +99,7 @@ void    RPN::subtract()
     RPNStack.pop();
     result = a - b;
     RPNStack.push(result);
-    // std::cout << a << " - " << b << " = " << result << std::endl;
+    std::cout << a << " - " << b << " = " << result << std::endl;
 }
 
 void    RPN::multiply()
@@ -113,7 +113,7 @@ void    RPN::multiply()
     RPNStack.pop();
     result = a * b;
     RPNStack.push(result);
-    // std::cout << a << " * " << b << " = " << result << std::endl;
+    std::cout << a << " * " << b << " = " << result << std::endl;
 }
 
 void    RPN::divide()
@@ -129,5 +129,5 @@ void    RPN::divide()
     RPNStack.pop();
     result = a / b;
     RPNStack.push(result);
-    // std::cout << a << " / " << b << " = " << result << std::endl;
+    std::cout << a << " / " << b << " = " << result << std::endl;
 }

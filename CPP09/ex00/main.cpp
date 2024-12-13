@@ -15,8 +15,8 @@ int main(int argc, char *argv[])
 	try {
 		Bitcoin btc("data.csv");
 		btc.Input(argv[1]);
-	} catch (...) {
-		std::cout << "Error" << std::endl;
+	} catch (const std::runtime_error &error) {
+		std::cout << "Error: " << error.what() << std::endl;
 		return (-1);
 	}
 	return (0);

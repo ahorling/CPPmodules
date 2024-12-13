@@ -47,7 +47,7 @@ bool    checkDay(const std::string &day)
     int d = std::stoi(day);
     if (d < 1 || d > 31)
         return (false);
-
+    return(true);
 }
 
 bool    checkMonth(const std::string &month)
@@ -71,8 +71,8 @@ bool    isValid(const std::string &input)
     std::string month;
     std::string day;
     int         pos;
-    int         count;
-	for (int i = 0; i < input.length(); i++)  //check to make sure not more than 2 dashes
+    int         count = 0;
+	for (size_t i = 0; i < input.length(); i++)  //check to make sure not more than 2 dashes
 	{
 		if (input[i] == '-')
 			count++;
@@ -106,7 +106,7 @@ void    Bitcoin::getData(const std::string &file)
     std::getline(db, line); 
     while (std::getline(db, line))
     {
-        int pos = line.find(',');
+        size_t pos = line.find(',');
         if (pos == std::string::npos)
             throw std::runtime_error("file format incorrect");
         std::string key = line.substr(0, pos); //grab everything up to the ','
@@ -114,8 +114,6 @@ void    Bitcoin::getData(const std::string &file)
             throw std::runtime_error("file format incorrect");
         if (key < startDate)
             startDate = key;
-        else
-            throw std::runtime_error("file format incorrect");
         std::string value = line.substr(pos + 1); //grab the value part after ','
         pair[key] = std::stod(value);
     }
@@ -170,7 +168,7 @@ double Bitcoin::getRate(const std::string &date)
     {
         temp = decreaseDate(temp);
         if (pair.find(temp) != pair.end())
-            return(pair[date]);
+            return(pair[temp]);
     }
     throw std::runtime_error("reached the end of getRate. That wasn't supposed to happen....");
 }
@@ -186,20 +184,35 @@ void    Bitcoin::Input(const std::string &file)
     std::getline(input, line);
     while (std::getline(input, line))
     {
-        int pos = line.find('|');
-        if (pos == std::string::npos)
-            throw std::runtime_error("provided file formatted incrrectly.");
+        size_t pos = line.find('|');
         std::string date = line.substr(0, pos - 1);
-        if (!isValid(date))
-            throw std::runtime_error("provided file has incorrect date(s)");
+        if (pos == std::string::npos)
+        {
+            std::cout << "Error: provided line formatted incorrectly. => " << line << std::endl;
+            continue;
+        }
+        else if (!isValid(date))
+        {
+            std::cout << "Error: provided file has incorrect date(s) => " << line << std::endl;
+            continue;
+        }
         else if (date < startDate)
-            throw std::runtime_error("provided date is earlier than earliest date in database");
+        {
+            std::cout << "Error: date is earlier than the earliest date in the database. => " << line << std::endl;
+            continue;
+        }
         std::string value = line.substr(pos + 1);
         double btc = std::stod(value);
         if (btc <= 0)
-            std::runtime_error("Non-positive number found");
-        else if (btc > 2147483647 || btc >= 10000)
-            std::runtime_error("please use a smaller number");
+        {
+            std::cout << "Error: not a positive number. => " << line << std::endl;
+            continue;
+        }
+        else if (btc >= 10000)
+        {
+            std::cout << "Error: too large a number. => " << line << std::endl;
+            continue;
+        }
         try {
             double rate = getRate(date);
             std::cout << date << " => " << btc << " = " << btc * rate << std::endl;

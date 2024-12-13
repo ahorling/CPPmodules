@@ -12,7 +12,8 @@ int main(int argc, char *argv[])
 	try {
 		RPN solve;
 		solve.calc(argv[1]);
-	} catch (...) {
+	} catch (std::runtime_error &error) {
+		std::cout << "fatal error found: " << error.what() << std::endl;
 		return (-1);
 	}
 	return(0);

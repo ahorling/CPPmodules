@@ -1,5 +1,5 @@
-#ifndef BITCOINEXCHANGE.HPP
-# define BITCOINEXCHANGE.HPP
+#ifndef BITCOINEXCHANGE_HPP
+# define BITCOINEXCHANGE_HPP
 
 #include <iostream>
 #include <map>
